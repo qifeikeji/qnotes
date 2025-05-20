@@ -31,7 +31,7 @@ jobs:
         
     - name: Build with PyInstaller
       run: |
-        pyinstaller --noconfirm --onedir --windowed \
+        pyinstaller --noconfirm --onefile --windowed \
           --add-data "resource:resource" \
           --add-data "resource/MaterialSymbols:resource/MaterialSymbols" \
           --add-data "resource/MaterialSymbols/MaterialSymbolsOutlined.json:resource/MaterialSymbols" \
@@ -43,7 +43,7 @@ jobs:
     - name: Create portable archive
       run: |
         cd dist
-        tar -czf qnotes-linux-portable.tar.gz qnotes/
+        tar -czf qnotes-linux-portable.tar.gz qnotes
         
     - name: Upload artifact
       uses: actions/upload-artifact@v4
