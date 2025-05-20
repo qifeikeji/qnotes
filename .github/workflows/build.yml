@@ -31,7 +31,14 @@ jobs:
         
     - name: Build with PyInstaller
       run: |
-        pyinstaller --noconfirm --onedir --windowed --add-data "resource:resource" --name qnotes main.py
+        pyinstaller --noconfirm --onedir --windowed \
+          --add-data "resource:resource" \
+          --add-data "resource/MaterialSymbols:resource/MaterialSymbols" \
+          --add-data "resource/MaterialSymbols/MaterialSymbolsOutlined.json:resource/MaterialSymbols" \
+          --add-data "resource/MaterialSymbols/MaterialSymbolsOutlined.ttf:resource/MaterialSymbols" \
+          --add-data "resource/qnotes-icons.ttf:resource" \
+          --add-data "resource/style.css:resource" \
+          --name qnotes main.py
         
     - name: Create portable archive
       run: |
