@@ -433,7 +433,7 @@ class Main(Frameless if isWin else QWidget):
 			(COLOR, "hovered")
 		]
 
-		with open("resource/style.css", "r") as f:
+		with open(resource_path("resource/style.css"), "r") as f:
 			css = f.read()
 			for dictName, key in values:
 				css = css.replace(f"{{{key}}}", str(dictName[key]))
@@ -479,7 +479,7 @@ if __name__ == "__main__":
 	app = QApplication([])
 	setFontConf()
 	elem["app"] = app
-	app.setWindowIcon(QIcon("resource/logo.ico"))
+	app.setWindowIcon(QIcon(resource_path("resource/logo.ico")))
 	app.setEffectEnabled(Qt.UIEffect.UI_AnimateMenu, False)
 
 
