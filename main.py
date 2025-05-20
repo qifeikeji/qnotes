@@ -1,21 +1,17 @@
-
-
-
-
-
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 
 import sys, ctypes, os, re, json, random, shutil, sass, subprocess, threading, time, math
 
-
-
-
-
-
-
-
+def resource_path(relative_path):
+	""" 获取资源的绝对路径，适用于开发环境和 PyInstaller 打包后的环境 """
+	try:
+		# PyInstaller 创建临时文件夹，将路径存储在 _MEIPASS 中
+		base_path = sys._MEIPASS
+	except Exception:
+		base_path = os.path.abspath(".")
+	return os.path.join(base_path, relative_path)
 
 try:
 	with open("data.json", "r") as file:
@@ -259,9 +255,9 @@ class Main(Frameless if isWin else QWidget):
 		elem["main"] = self
 		self.setObjectName("main")
 
-		QFontDatabase.addApplicationFont(f"resource/{PARAM['iconName']}.ttf")
-		QFontDatabase.addApplicationFont(f"resource/MaterialSymbols/MaterialSymbolsOutlined.ttf")
-		with open("resource/MaterialSymbols/MaterialSymbolsOutlined.json", "r") as file:
+		QFontDatabase.addApplicationFont(resource_path(f"resource/{PARAM['iconName']}.ttf"))
+		QFontDatabase.addApplicationFont(resource_path(f"resource/MaterialSymbols/MaterialSymbolsOutlined.ttf"))
+		with open(resource_path("resource/MaterialSymbols/MaterialSymbolsOutlined.json"), "r") as file:
 			self.materialIcons = json.load(file)
 
 
