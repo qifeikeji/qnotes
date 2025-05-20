@@ -1,0 +1,107 @@
+name: Build Portable App
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pyinstaller
+        
+    - name: Build with PyInstaller
+      run: |
+        pyinstaller --noconfirm --onedir --windowed --icon=resource/icon.ico --add-data "resource;resource" --name qnotes main.py
+        
+    - name: Create portable archive
+      run: |
+        cd dist
+        7z a -tzip qnotes-windows-portable.zip qnotes/
+        
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: qnotes-windows
+        path: dist/qnotes-windows-portable.zip
+
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libgl1-mesa-glx
+        
+    - name: Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pyinstaller
+        
+    - name: Build with PyInstaller
+      run: |
+        pyinstaller --noconfirm --onedir --windowed --add-data "resource:resource" --name qnotes main.py
+        
+    - name: Create portable archive
+      run: |
+        cd dist
+        tar -czf qnotes-linux-portable.tar.gz qnotes/
+        
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: qnotes-linux
+        path: dist/qnotes-linux-portable.tar.gz
+
+  build-macos:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pyinstaller
+        
+    - name: Build with PyInstaller
+      run: |
+        pyinstaller --noconfirm --onedir --windowed --add-data "resource:resource" --name qnotes main.py
+        
+    - name: Create portable archive
+      run: |
+        cd dist
+        zip -r qnotes-macos-portable.zip qnotes/
+        
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: qnotes-macos
+        path: dist/qnotes-macos-portable.zip 
